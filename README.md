@@ -187,6 +187,50 @@ services:
 
 ```bash
 docker logs -f rustdesk-rustdesk-1
+```
+### 其它实用命令
+
+```bash
+生成新 SSH 密钥
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+设置你的用户名和邮件地址
+$ git config --global user.name "John Doe"
+$ git config --global user.email johndoe@example.com
+
+测试连接
+ssh -T git@github.com
+
+查看远程标签
+git ls-remote --tags <remote-name>
+
+查看本地标签
+git tag
+
+删除本地标签
+git tag -d <tagname>
+
+删除远程标签
+git push origin --delete <tagname>
+
+查看所有分支
+git branch -a
+
+查看防火墙规则
+ufw status
+
+配置开放端口
+ufw allow 21114:21119/tcp
+ufw allow 21116/udp
+
+重新加载防火墙
+ufw reload
+
+启用防火墙
+ufw enable
+
+禁用防火墙
+ufw disable
 
 安装Docker
 bash <(wget -qO- https://get.docker.com)
