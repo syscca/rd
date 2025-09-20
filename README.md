@@ -1,7 +1,5 @@
 # RustDesk 自定义修改和构建指南
 
-本指南基于提供的步骤，帮助您Fork、修改和构建RustDesk的自定义版本，包括更改API服务器、删除广告提示、修改子模块配置等。操作基于GitHub和Git命令，确保您已安装Git和必要的开发环境。所有步骤假设您有GitHub账户。
-
 ## 1. Fork 项目和子模块
 
 - **主项目 (rustdesk)**：
@@ -61,7 +59,7 @@ fn get_api_server_(api: String, custom: String) -> String {
             return format!("http://{}", s);
         }
     }
-    "https://admin.你的域名.com".to_owned()
+    "https://你的域名.com".to_owned()
 }
 ```
 
@@ -83,7 +81,6 @@ Widget setupServerWidget() => Flexible(
    ),
  );
 ```
-
 ## 5. 修改子模块配置
 
 - 进入子模块目录：
@@ -106,14 +103,14 @@ pub const RS_PUB_KEY: &str = "你的KEY";
 
 ```bash
 # 创建新分支（推荐）
-git checkout -b fix-branch
+git switch main
 
 # 添加并提交修改
 git add src/config.rs
 git commit -m "修改 config.rs"
 
 # 推送分支到您的 hbb_common 仓库
-git push origin fix-branch
+git push
 ```
 
 ## 7. 同步子模块到主项目
@@ -122,49 +119,13 @@ git push origin fix-branch
 
 ```bash
 cd ../..
-```
-
-- 更新主项目对子模块的引用：
-
-```bash
 git add libs/hbb_common
-git commit -m "更新子模块 hbb_common 到修改后的版本"
-```
-
-## 8. 创建 Tag
-
-- 切换到主分支（确保所有修改已提交）：
-
-```bash
-git checkout master  # 或您的目标分支
-```
-
-- 创建带附注的标签：
-
-```bash
-git tag -a v1.4.2 -m "Release 1.4.2 with custom fixes"
-```
-
-- 验证标签：
-
-```bash
-git show v1.4.2  # 检查是否包含子模块更新和文件修改
-```
-
-## 9. 推送所有更改到远程仓库
-
-- 推送主项目代码和标签：
-
-```bash
-git push origin master
+git add .gitmodules
+git add src/common.rs
+git add flutter/lib/desktop/pages/connection_page.dart
+git commit -m "修改配置"
+git tag -a v1.4.2 -m "Release 1.4.2"
 git push origin v1.4.2
-```
-
-- 推送子模块分支（确保已被主项目引用）：
-
-```bash
-cd libs/hbb_common
-git push origin fix-branch
 ```
 
 ## 10. 开始编译
@@ -226,4 +187,46 @@ services:
 
 ```bash
 docker logs -f rustdesk-rustdesk-1
+
+安装Docker
+bash <(wget -qO- https://get.docker.com)
+
+查看所有可用的镜像
+docker images
+
+删除一个镜像
+docker rmi <镜像ID>
+
+删除所有未被使用的镜像
+docker image prune
+
+docker 查看运行的容器
+docker ps
+
+docker 查看所有容器
+docker ps -a
+
+停止一个容器
+docker stop <容器ID或名称>
+
+立即强制停止一个容器
+docker kill <容器ID或名称>
+
+启动一个容器
+docker start <容器ID或名称>
+
+停止所有docker容器
+docker stop $(docker ps -q)
+
+删除一个容器
+docker rm <容器ID或名称>
+
+删除所有docker容器
+docker container prune
+
+生成JWT_KEY
+openssl rand -base64 32
+
+启动容器docker-compose.yml
+docker compose up -d
 ```
